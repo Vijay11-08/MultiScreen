@@ -80,9 +80,65 @@ function saveState() {
     localStorage.setItem('multiscreen_workspace_state', JSON.stringify(state));
 }
 
+// Converts standard/shorts/shortened YouTube URLs to standard embed urls to support iframe playability
+function convertYoutubeUrl(url) {
+    if (!url) return url;
+    try {
+        const trimmed = url.trim();
+        const urlObj = new URL(trimmed);
+        
+        // Handle short URLs (youtu.be)
+        if (urlObj.hostname.toLowerCase() === 'youtu.be') {
+            const videoId = urlObj.pathname.slice(1);
+            if (videoId) {
+                const time = urlObj.searchParams.get('t') || urlObj.searchParams.get('start');
+                let embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                if (time) {
+                    const seconds = time.replace('s', '');
+                    embedUrl += `?start=${seconds}`;
+                }
+                return embedUrl;
+            }
+        }
+        
+        // Handle standard/shorts/embed URLs
+        if (urlObj.hostname.toLowerCase().includes('youtube.com')) {
+            let videoId = '';
+            if (urlObj.pathname.includes('/watch')) {
+                videoId = urlObj.searchParams.get('v');
+            } else if (urlObj.pathname.includes('/shorts/')) {
+                videoId = urlObj.pathname.split('/shorts/')[1].split(/[?#]/)[0];
+            } else if (urlObj.pathname.includes('/embed/')) {
+                return trimmed;
+            } else if (urlObj.pathname.includes('/v/')) {
+                videoId = urlObj.pathname.split('/v/')[1].split(/[?#]/)[0];
+            }
+            
+            if (videoId) {
+                const time = urlObj.searchParams.get('t') || urlObj.searchParams.get('start');
+                let embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                if (time) {
+                    const seconds = time.replace('s', '');
+                    embedUrl += `?start=${seconds}`;
+                }
+                return embedUrl;
+            }
+        }
+    } catch (e) {
+        // Fallback matching using regex if URL parsing fails
+        const watchMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\s?]+)/);
+        if (watchMatch && watchMatch[1]) {
+            return `https://www.youtube.com/embed/${watchMatch[1]}`;
+        }
+    }
+    return url;
+}
+
 // Check if a URL will likely bust an iframe
 function isLikelyIframeBuster(url) {
     if (!url) return false;
+    // YouTube embed URLs are safe
+    if (url.toLowerCase().includes('youtube.com/embed/')) return false;
     try {
         const domain = new URL(url).hostname.toLowerCase();
         return IFRAME_BUST_DOMAINS.some(d => domain.includes(d));
@@ -103,6 +159,10 @@ function sanitizeUrl(url, autoHttps = true) {
     if (autoHttps && !/^https?:\/\//i.test(trimmed)) {
         trimmed = "https://" + trimmed;
     }
+
+    // Convert YouTube URL if matching
+    trimmed = convertYoutubeUrl(trimmed);
+
     return trimmed;
 }
 
@@ -225,10 +285,20 @@ function createScreenCard(screen, displayIndex) {
         <div class="screen-body">
             <!-- Iframe refuter notification -->
             <div class="iframe-protection-warning ${isBuster ? 'visible' : ''}">
-                <i data-lucide="alert-triangle"></i>
-                <h4>Iframe Block Warning</h4>
-                <p>This website blocks iframe embedding. You can load this via the <strong>Chrome Multi-Window Engine</strong>, or install the suggested bypass extension.</p>
-                <button class="btn btn-secondary btn-block" style="padding: 6px 12px; font-size: 0.75rem;" onclick="openHelpModal()">Troubleshoot Link</button>
+                <i data-lucide="alert-triangle" class="warning-icon"></i>
+                <h4>Connection Blocked by Site</h4>
+                <p>This site (${screen.label || 'this domain'}) prevents iframe embedding for security.</p>
+                <div class="warning-actions">
+                    <button class="btn btn-glow warning-action-btn" onclick="openSinglePopup(${screen.id})">
+                        <i data-lucide="external-link"></i> Launch Popup
+                    </button>
+                    <button class="btn btn-secondary warning-action-btn" onclick="openDirect(${screen.id})">
+                        <i data-lucide="arrow-up-right"></i> Open Tab
+                    </button>
+                </div>
+                <button class="btn btn-text-link" onclick="openHelpModal()">
+                    <i data-lucide="help-circle"></i> Why does this happen?
+                </button>
             </div>
 
             <!-- Empty State Placeholder -->
@@ -352,6 +422,23 @@ window.openDirect = function(id) {
     const screen = state.screens.find(s => s.id === id);
     if (screen && screen.url) {
         window.open(screen.url, '_blank');
+    }
+};
+
+window.openSinglePopup = function(id) {
+    const screen = state.screens.find(s => s.id === id);
+    if (!screen || !screen.url) return;
+
+    // Open a single clean popup window in the center of the screen
+    const width = 1100;
+    const height = 800;
+    const left = (window.screen.width - width) / 2;
+    const top = (window.screen.height - height) / 2;
+    const specs = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
+    
+    const newWindow = window.open(screen.url, `_blank_workspace_win_single_${id}`, specs);
+    if (!newWindow) {
+        alert("Pop-up blocked! Please click 'Always Allow Popups' in the top-right of your browser bar.");
     }
 };
 
