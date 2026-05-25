@@ -152,25 +152,35 @@ Or use VS Code Live Server for better development experience.
 
 # 👨‍💻 Developer
 
-# 👨‍💻 Developer
-
 <div align="center">
 
-<img src="https://media.licdn.com/dms/image/D4D03AQYOUR_IMAGE_LINK/profile-displayphoto-shrink_400_400/0/yourphoto.jpg" width="180" style="border-radius:50%; border:4px solid #00C2FF;" />
+<img src="https://media.licdn.com/dms/image/v2/D4D03AQEvjokWHpeK-g/profile-displayphoto-shrink_200_200/B4DZdACWJeHMAg-/0/1749126048516?e=2147483647&v=beta&t=WSrGG6sRuiuNzMkb7778Hr_-ctjcd8XHZ5iAW7ipg_Q" width="180" style="border-radius:50%; border:4px solid #00C2FF; box-shadow:0px 0px 25px rgba(0,194,255,0.8);" />
 
-# Vijay Otaradi
+<br><br>
 
-### 💻 Full Stack Developer | 📊 Data Science Enthusiast | 🚀 Frontend Creator
+# 🚀 Vijay Otaradi
+
+### 💻 Full Stack Developer • 🌐 Frontend Creator • 📊 Data Science Enthusiast
+
+<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&weight=600&size=22&duration=3000&pause=1000&color=00C2FF&center=true&vCenter=true&width=700&lines=HTML+%7C+CSS+%7C+JavaScript;React+Developer;ASP.NET+Core+Developer;Flutter+Developer;AI+%26+Machine+Learning+Enthusiast" />
 
 <br>
 
 <a href="https://github.com/Vijay11-08">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github" />
+<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
 </a>
 
 <a href="https://linkedin.com/in/vijay-otaradi-678427266">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin" />
+<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
 </a>
+
+<br><br>
+
+<img src="https://github-readme-stats.vercel.app/api?username=Vijay11-08&show_icons=true&theme=tokyonight&hide_border=true" />
+
+<br>
+
+<img src="https://github-readme-streak-stats.herokuapp.com/?user=Vijay11-08&theme=tokyonight&hide_border=true" />
 
 </div>
 
