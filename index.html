@@ -58,7 +58,7 @@
                         <label for="screenCount">Number of Screens</label>
                         <div class="input-with-buttons">
                             <button class="btn-input-adj" id="decScreensBtn">-</button>
-                            <input type="number" id="screenCount" min="1" max="24" value="4">
+                            <input type="number" id="screenCount" min="1" max="100" value="4">
                             <button class="btn-input-adj" id="incScreensBtn">+</button>
                         </div>
                     </div>
@@ -70,6 +70,20 @@
                             <option value="4-3">4:3 Standard</option>
                             <option value="1-1">1:1 Square</option>
                             <option value="9-16">9:16 Portrait</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gridCols">Grid Columns per Row</label>
+                        <select id="gridCols">
+                            <option value="auto">Auto (Balanced)</option>
+                            <option value="1">1 Screen per Row</option>
+                            <option value="2">2 Screens per Row</option>
+                            <option value="3">3 Screens per Row</option>
+                            <option value="4">4 Screens per Row</option>
+                            <option value="5">5 Screens per Row</option>
+                            <option value="6">6 Screens per Row</option>
+                            <option value="8">8 Screens per Row</option>
+                            <option value="10">10 Screens per Row</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -218,10 +232,18 @@
                         <h4>Install a Chrome Header Modifier (Recommended)</h4>
                         <p>You can bypass standard iframe restrictions on local dashboards by installing a browser extension that ignores the <code>X-Frame-Options</code> and <code>Content-Security-Policy</code> headers.</p>
                         <div class="extension-suggestions">
-                            <h5>Popular Free Options:</h5>
-                            <ul>
-                                <li><strong>Ignore X-Frame-Options</strong> (Bypasses security headers for standard local tasks)</li>
-                                <li><strong>Allow CORS: Access-Control-Allow-Origin</strong> (Bypasses CORS restrictions)</li>
+                            <h5>Popular Free Options (Direct Links):</h5>
+                            <ul style="list-style-type: none; margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                                <li>
+                                    <a href="https://chromewebstore.google.com/detail/ignore-x-frame-headers/gleabkkhedgedceonmetaanecnkehbok" target="_blank" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; width: 100%; justify-content: flex-start; font-size: 0.78rem;">
+                                        <i data-lucide="download" style="width: 14px; height: 14px;"></i> <strong>Ignore X-Frame Headers</strong> (Unlocks GitHub & Google)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://chromewebstore.google.com/detail/allow-cors-access-contro/lhobafahddgceljminmfnolchjmcocjo" target="_blank" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; width: 100%; justify-content: flex-start; font-size: 0.78rem;">
+                                        <i data-lucide="download" style="width: 14px; height: 14px;"></i> <strong>Allow CORS Bypass</strong> (Fixes CORS Restrictions)
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>

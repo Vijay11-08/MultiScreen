@@ -3,6 +3,7 @@ const DEFAULT_STATE = {
     workspaceName: "My Active Workspace",
     screenCount: 4,
     aspectRatio: "auto",
+    gridCols: "auto",
     gridGap: 16,
     theme: "dark",
     screens: [
@@ -33,6 +34,7 @@ const screenCountInput = document.getElementById('screenCount');
 const incScreensBtn = document.getElementById('incScreensBtn');
 const decScreensBtn = document.getElementById('decScreensBtn');
 const aspectRatioSelect = document.getElementById('aspectRatio');
+const gridColsSelect = document.getElementById('gridCols');
 const gridGapSlider = document.getElementById('gridGap');
 const gridGapVal = document.getElementById('gridGapVal');
 const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -199,6 +201,7 @@ function renderWorkspace() {
     workspaceTitle.textContent = state.workspaceName;
     screenCountInput.value = state.screenCount;
     aspectRatioSelect.value = state.aspectRatio;
+    if (gridColsSelect) gridColsSelect.value = state.gridCols || "auto";
     gridGapSlider.value = state.gridGap;
     gridGapVal.textContent = `${state.gridGap}px`;
     activeCountText.textContent = `${state.screenCount} Screen${state.screenCount > 1 ? 's' : ''} Running`;
@@ -209,13 +212,22 @@ function renderWorkspace() {
     // Calculate grid columns dynamically
     const n = state.screenCount;
     let cols = 1;
-    if (n === 1) cols = 1;
-    else if (n === 2) cols = 2;
-    else if (n === 3) cols = 3;
-    else if (n === 4) cols = 2;
-    else if (n <= 9) cols = 3;
-    else if (n <= 16) cols = 4;
-    else cols = 5;
+    if (state.gridCols && state.gridCols !== "auto") {
+        cols = parseInt(state.gridCols);
+    } else {
+        if (n === 1) cols = 1;
+        else if (n === 2) cols = 2;
+        else if (n === 3) cols = 3;
+        else if (n === 4) cols = 2;
+        else if (n <= 9) cols = 3;
+        else if (n <= 16) cols = 4;
+        else if (n <= 25) cols = 5;
+        else if (n <= 36) cols = 6;
+        else if (n <= 49) cols = 7;
+        else if (n <= 64) cols = 8;
+        else if (n <= 81) cols = 9;
+        else cols = 10;
+    }
 
     // Apply grid configurations to parent container
     gridViewport.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
@@ -506,7 +518,7 @@ expandSidebarBtn.addEventListener('click', () => {
 // Custom Workspace Screen Count Increments/Decrements
 incScreensBtn.addEventListener('click', () => {
     let count = parseInt(screenCountInput.value);
-    if (count < 24) {
+    if (count < 100) {
         count++;
         state.screenCount = count;
         saveState();
@@ -527,7 +539,7 @@ decScreensBtn.addEventListener('click', () => {
 screenCountInput.addEventListener('change', () => {
     let count = parseInt(screenCountInput.value);
     if (isNaN(count) || count < 1) count = 1;
-    if (count > 24) count = 24;
+    if (count > 100) count = 100;
     state.screenCount = count;
     saveState();
     renderWorkspace();
@@ -536,6 +548,13 @@ screenCountInput.addEventListener('change', () => {
 // Aspect Ratio Updates
 aspectRatioSelect.addEventListener('change', () => {
     state.aspectRatio = aspectRatioSelect.value;
+    saveState();
+    renderWorkspace();
+});
+
+// Grid Columns per Row Updates
+gridColsSelect.addEventListener('change', () => {
+    state.gridCols = gridColsSelect.value;
     saveState();
     renderWorkspace();
 });
